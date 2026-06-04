@@ -3,7 +3,7 @@ using namespace std;
 
 struct Movie
 {
-    string movieID;
+    int movieID;
     string movieTitle;
     int movieRating;
     string movieGenre;
@@ -11,6 +11,8 @@ struct Movie
 
 Movie* Movies = nullptr;
 
+int globalmovieID = 100;
+ 
 int movieCount = 0;
 
 int ds_size = 5;
@@ -43,20 +45,22 @@ void addMovie(){
 
     Movie tempMovie;
 
-    cout << "Movie ID: "; getline(cin,tempMovie.movieID);
+    tempMovie.movieID = globalmovieID;
     cout << "Title: "; getline(cin,tempMovie.movieTitle);
-    cout << "Rating: "; cin >> tempMovie.movieRating;
-    cout << "Genre: "; getline(cin,tempMovie.movieGenre);
-
+    cout << "Rating: "; cin >> tempMovie.movieRating; cin.ignore();
+    cout << "Genre: "; 
+    getline(cin,tempMovie.movieGenre);
+    
     Movies[movieCount] = tempMovie;
     movieCount++;
+    globalmovieID++;
     cout << "New Movie Added.";
 }
 
 void delMovie()
 {
-    string movieID;
-    cout << "Enter Movie ID: "; getline(cin,movieID);
+    int movieID;
+    cout << "Enter Movie ID: "; cin >> movieID;
 
     int movieIndex = -1;
     for (int i=0; i < movieCount; i++){
@@ -80,12 +84,12 @@ void delMovie()
 }
 
 void searchMovie()
-{   string movieID_1;
-    cout << "Enter movie Title or ID: "; getline(cin,movieID_1);
+{   int movieID_1;
+    cout << "Enter movie ID: "; cin >> movieID_1;
     bool found = false;
 
     for (int i = 0; i < movieCount; i++){
-        if (Movies[i].movieID == movieID_1 || Movies[i].movieTitle == movieID_1){
+        if (Movies[i].movieID == movieID_1){
             cout << "Movie ID: " << Movies[i].movieID << endl;
             cout << "Movie Title: " << Movies[i].movieTitle << endl;
             cout << "Movie Genre: " << Movies[i].movieGenre << endl;
@@ -100,8 +104,8 @@ void searchMovie()
 }
 
 void rateMovie(){
-    string movieID_1;
-    cout << "Enter Movie ID: "; getline(cin,movieID_1);
+    int movieID_1;
+    cout << "Enter Movie ID: "; cin>>movieID_1;
     bool found = false;
 
     for (int i = 0; i < movieCount; i++){
