@@ -86,10 +86,10 @@ void searchMovie()
 
     for (int i = 0; i < movieCount; i++){
         if (Movies[i].movieID == movieID_1 || Movies[i].movieTitle == movieID_1){
-            cout << "Movie ID: " << Movies[i].movieID;
-            cout << "Movie Title: " << Movies[i].movieTitle;
-            cout << "Movie Genre: " << Movies[i].movieGenre;
-            cout << "Movie Rating: " << Movies[i].movieRating;
+            cout << "Movie ID: " << Movies[i].movieID << endl;
+            cout << "Movie Title: " << Movies[i].movieTitle << endl;
+            cout << "Movie Genre: " << Movies[i].movieGenre << endl;
+            cout << "Movie Rating: " << Movies[i].movieRating << endl;
             found = true;
         }
         
@@ -133,20 +133,20 @@ void rateMovie(){
 void showTopMovies()
 {
     for(int i = 0; i < movieCount; i++){
-        for(int j = 0; j < movieCount; j++)
-        if (Movies[i].movieRating < Movies[i+1].movieRating){
-            Movie tempMovie = Movies[i];
-            Movies[i] = Movies[i+1];
-            Movies[i+1] = tempMovie;
+        for(int j = 0; j < movieCount - 1; j++)
+        if (Movies[j].movieRating < Movies[j+1].movieRating){
+            Movie tempMovie = Movies[j];
+            Movies[j] = Movies[j+1];
+            Movies[j+1] = tempMovie;
         }
     }
 
     cout << "Your top 3 Movies are: " << endl;
     for (int i = 0; i < 3; i++){
-        cout << "Movie ID: " << Movies[i].movieID;
-        cout << "Movie Title: " << Movies[i].movieTitle;
-        cout << "Movie Genre: " << Movies[i].movieGenre;
-        cout << "Movie Rating: " << Movies[i].movieRating;
+        cout << "Movie ID: " << Movies[i].movieID << endl;
+        cout << "Movie Title: " << Movies[i].movieTitle << endl;
+        cout << "Movie Genre: " << Movies[i].movieGenre << endl;
+        cout << "Movie Rating: " << Movies[i].movieRating << endl;
     }
 }
 
@@ -157,7 +157,12 @@ void genreMovie()
 
 void allMovie()
 {
-    return;
+    for(int i = 0; i < movieCount; i++){
+        cout << "Movie ID: " << Movies[i].movieID << endl;
+        cout << "Movie Title: " << Movies[i].movieTitle << endl;
+        cout << "Movie Genre: " << Movies[i].movieGenre << endl;
+        cout << "Movie Rating: " << Movies[i].movieRating << endl;
+    }
 }
 
 void saveToFile()
