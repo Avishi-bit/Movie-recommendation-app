@@ -165,48 +165,44 @@ void find3max(){
     if(top3 != -1){
         printMovie(top3);
     }
+    //make sure some output is present, in case no rating available, or some other issue.
 }
 
 void showTopMovies(){
     find3max();
 }
 
-void genreMovie()
-{
-    string processedGenres[10];
-    int processedCount = 0;
 
-    for (int i = 0; i < movieCount; i++)
+void genreMovie(){
+    struct genreArray{
+        string genreName;
+        int genreCount;
+    };
+    
+    genreArray genresCounted[movieCount];
+    int Counted = 0;
+
+
+    for(int i = 0; i < movieCount; i++){
+        bool found = false;
+        for(int j = 0; j < Counted; j++){
+            if (genresCounted[j].genreName == Movies[i].movieGenre){
+                found = true;
+                genresCounted[j].genreCount++;
+            }
+        }
+        if (!found){
+            genresCounted[Counted].genreName = Movies[i].movieGenre;
+            genresCounted[Counted].genreCount = 1;
+            Counted++;
+        }
+    }
+    
+    cout << "Genre Statistics:" << endl;
+
+    for (int i = 0; i < Counted; i++)
     {
-        bool alreadyProcessed = false;
-
-        // Check if genre has already been counted
-        for (int j = 0; j < processedCount; j++)
-        {
-            if (Movies[i].movieGenre == processedGenres[j])
-            {
-                alreadyProcessed = true;
-                break;
-            }
-        }
-
-        if(!alreadyProcessed){
-            int genreCount = 0;
-
-            // Count movies of this genre
-            for (int j = 0; j < movieCount; j++)
-            {
-                if (Movies[j].movieGenre == Movies[i].movieGenre)
-                {
-                genreCount++;
-                }
-            }
-
-            cout << Movies[i].movieGenre << ": " << genreCount << " movies" << endl;
-
-            processedGenres[processedCount] = Movies[i].movieGenre;
-            processedCount++;
-        }
+        cout << genresCounted[i].genreName << ": "<< genresCounted[i].genreCount<< " movie(s)" << endl;
     }
 }
 
@@ -325,3 +321,6 @@ int main(){
     
     cout << "Thank you for using the Movie Recommendation App!";
 }
+
+
+//clone this and try to create a dynamic system of this
