@@ -19,8 +19,23 @@ int movieCount = 0;
 
 int ds_size = 5;
 
+int gsize = 0;
+
+struct genreArray{
+    string genreName;
+    int genreCount;
+};
+
+genreArray *genresCounted = nullptr;
+int Counted = 0;
+
+
 void initialize_movies(){
     Movies = new Movie[ds_size];
+}
+
+void initialize_genres(){
+    genresCounted = new genreArray[gsize];
 }
 
 void resizeArray()
@@ -38,12 +53,28 @@ void resizeArray()
     Movies = tempArray;
 }
 
+void resizeGenres()
+{
+    gsize++;
+    genreArray* tempArray = new genreArray[gsize];
+
+    for (int i = 0; i < gsize; i++)
+    {
+        tempArray[i] = genresCounted[i];
+    }
+
+    delete[] genresCounted;
+
+    genresCounted = tempArray;
+}
+
 void addMovie(){
 
     if (movieCount == ds_size)
     {
         resizeArray();
     }
+
 
     Movie tempMovie;
 
@@ -56,6 +87,23 @@ void addMovie(){
     movieCount++;
     globalmovieID++;
     cout << "New Movie Added." << endl;
+
+    updateGenre_on_addn(tempMovie.movieGenre);
+}
+
+//utility fxn (chron work))
+void updateGenre_on_addn(string genre){
+    for(int i = 0; i < gsize; i++){
+        if(genresCounted[i].genreName == genre){
+            genresCounted[i].genreCount++;
+            return;
+        }
+    }
+    
+    resizeGenres();
+    genresCounted[movieCount].genreName = genre;
+    genresCounted[movieCount].genreCount = 1;
+
 }
 
 void delMovie()
@@ -174,15 +222,8 @@ void showTopMovies(){
 
 
 void genreMovie(){
-    struct genreArray{
-        string genreName;
-        int genreCount;
-    };
-    
-    genreArray genresCounted[movieCount];
-    int Counted = 0;
 
-
+    // make this array global and make it pointer
     for(int i = 0; i < movieCount; i++){
         bool found = false;
         for(int j = 0; j < Counted; j++){
@@ -284,7 +325,7 @@ int main(){
 
     int user_choice;
     initialize_movies();
-
+    initialize_genres();
     do
     {
         cout << "========= MOVIE RECOMMENDATION APP =========" << endl;
