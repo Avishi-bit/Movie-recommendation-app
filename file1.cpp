@@ -29,7 +29,6 @@ struct genreArray{
 genreArray *genresCounted = nullptr;
 int Counted = 0;
 
-
 void initialize_movies(){
     Movies = new Movie[ds_size];
 }
@@ -58,7 +57,7 @@ void resizeGenres()
     gsize++;
     genreArray* tempArray = new genreArray[gsize];
 
-    for (int i = 0; i < gsize; i++)
+    for (int i = 0; i < (gsize-1); i++)
     {
         tempArray[i] = genresCounted[i];
     }
@@ -66,6 +65,31 @@ void resizeGenres()
     delete[] genresCounted;
 
     genresCounted = tempArray;
+}
+
+//utility fxn (chron work))
+void updateGenre_on_addn(string genre){
+    for(int i = 0; i < gsize; i++){
+        if(genresCounted[i].genreName == genre){
+            genresCounted[i].genreCount++;
+            return;
+        }
+    }
+    
+    resizeGenres();
+    genresCounted[Counted].genreName = genre;
+    genresCounted[Counted].genreCount = 1;
+    Counted++;
+
+}
+
+void del_from_genre(string genre){
+    for(int i = 0; i < gsize; i++){
+        if(genresCounted[i].genreName == genre){
+            genresCounted[i].genreCount--;
+            return;
+        }
+    }
 }
 
 void addMovie(){
@@ -91,29 +115,14 @@ void addMovie(){
     updateGenre_on_addn(tempMovie.movieGenre);
 }
 
-//utility fxn (chron work))
-void updateGenre_on_addn(string genre){
-    for(int i = 0; i < gsize; i++){
-        if(genresCounted[i].genreName == genre){
-            genresCounted[i].genreCount++;
-            return;
-        }
-    }
-    
-    resizeGenres();
-    genresCounted[movieCount].genreName = genre;
-    genresCounted[movieCount].genreCount = 1;
-
-}
-
 void delMovie()
 {
-    int movieID;
-    cout << "Enter Movie ID: "; cin >> movieID;
+    string movieTitle;
+    cout << "Enter Movie Title: "; cin >> movieTitle;
 
     int movieIndex = -1;
     for (int i=0; i < movieCount; i++){
-        if (Movies[i].movieID == movieID){
+        if (Movies[i].movieTitle == movieTitle){
             movieIndex = i;
         }
     }
@@ -124,10 +133,11 @@ void delMovie()
         return;
     }
     else{
-        for(int i = movieIndex; i < movieCount; i++ ){
+        del_from_genre(Movies[movieIndex].movieGenre);
+        for(int i = movieIndex; i < movieCount-1; i++ ){
             Movies[i] = Movies[i+1];
-            movieCount--;
         }
+        movieCount--;
         cout << "Movie Deleted.";
     }
 }
@@ -142,20 +152,17 @@ void printMovie(int i){
 int searchMovie()
 {   string movieTitle_1;
     cout << "Enter movie Title: "; cin >> movieTitle_1;
-    bool found = false;
 
     for (int i = 0; i < movieCount; i++){
         if (Movies[i].movieTitle == movieTitle_1){
             printMovie(i);
-            found = true;
             return i;
         }
         
     }
-    if (!found){
-        cout << "No such movie found.";
-        return -1;
-    }
+
+    cout << "No such movie found.";
+    return -1;
 }
 
 void rateMovie(){
@@ -180,7 +187,9 @@ void rateMovie(){
 }
 
 void find3max(){
-    int top1,top2,top3 = -1;
+    int top1 = -1;
+    int top2 = -1;
+    int top3 = -1;
 
     for (int i = 0; i < movieCount; i++){
         if (top1 == -1 || Movies[i].movieRating > Movies[top1].movieRating)
@@ -220,28 +229,10 @@ void showTopMovies(){
     find3max();
 }
 
-
 void genreMovie(){
-
-    // make this array global and make it pointer
-    for(int i = 0; i < movieCount; i++){
-        bool found = false;
-        for(int j = 0; j < Counted; j++){
-            if (genresCounted[j].genreName == Movies[i].movieGenre){
-                found = true;
-                genresCounted[j].genreCount++;
-            }
-        }
-        if (!found){
-            genresCounted[Counted].genreName = Movies[i].movieGenre;
-            genresCounted[Counted].genreCount = 1;
-            Counted++;
-        }
-    }
-    
     cout << "Genre Statistics:" << endl;
 
-    for (int i = 0; i < Counted; i++)
+    for (int i = 0; i < gsize; i++)
     {
         cout << genresCounted[i].genreName << ": "<< genresCounted[i].genreCount<< " movie(s)" << endl;
     }
@@ -271,19 +262,19 @@ void saveToFile()
         }
     // this all comes in else 
         else{ //enter no. of movies in this file
+            fout << movieCount << endl;
             for(int i = 0; i<movieCount; i++){
-                fout << movieCount << endl;
                 fout << Movies[i].movieID << endl;
                 fout << Movies[i].movieTitle << endl;
                 fout << Movies[i].movieGenre << endl;
                 fout << Movies[i].movieRating << endl;
-    }
+            }
 
-    fout.close();
-    cout << "Data saved successfully." << endl;
+        }
+        
+        fout.close();
+        cout << "Data saved successfully." << endl;
     }
-    }
-
 }
 
 void loadFromFile()
@@ -303,12 +294,21 @@ void loadFromFile()
         int no_of_movies;
         // reading file's first line
         fin >> no_of_movies;
+        while (ds_size < no_of_movies){
+            resizeArray();
+        }
         for(int i = 0; i < no_of_movies; i++){
             fin >> Movies[i].movieID;
+            fin.ignore();
             getline(fin,Movies[i].movieTitle);
             getline(fin,Movies[i].movieGenre);
             fin >> Movies[i].movieRating;
+            fin.ignore();
+
+            updateGenre_on_addn(Movies[i].movieGenre);
         }
+
+        movieCount = no_of_movies;
     }
     
     fin.close();
