@@ -1,0 +1,61 @@
+15
+100
+Interstellar
+Sci-Fi
+10
+101
+Inception
+Sci-Fi
+9
+102
+The Dark Knight
+Action
+10
+103
+Titanic
+Romance
+8
+104
+The Notebook
+Romance
+7
+105
+Jaws
+Horror
+8
+106
+The Conjuring
+Horror
+9
+107
+Avengers Endgame
+Action
+9
+108
+John Wick
+Action
+8
+109
+La La Land
+Musical
+8
+110
+Whiplash
+Drama
+10
+111
+Parasite
+Thriller
+10
+112
+Frozen
+Animation
+7
+113
+Toy Story
+Animation
+9
+114
+The Prestige
+Mystery
+10

@@ -147,11 +147,12 @@ void printMovie(int i){
     cout << "Movie Title: " << Movies[i].movieTitle << endl;
     cout << "Movie Genre: " << Movies[i].movieGenre << endl;
     cout << "Movie Rating: " << Movies[i].movieRating << endl;
+    cout << "------------------------------" << endl;
 }
 
 int searchMovie()
 {   string movieTitle_1;
-    cout << "Enter movie Title: "; cin >> movieTitle_1;
+    cout << "Enter movie Title: "; getline(cin,movieTitle_1);
 
     for (int i = 0; i < movieCount; i++){
         if (Movies[i].movieTitle == movieTitle_1){
@@ -175,6 +176,7 @@ void rateMovie(){
     else{
         int newRating;
         cout << "Enter your new Rating (1-10)"; cin >> newRating;
+        cin.ignore();
 
         if (newRating <= 10 && newRating > 0){
             Movies[movieIndex].movieRating = newRating;
@@ -312,7 +314,7 @@ void loadFromFile()
     }
     
     fin.close();
-
+    cout << "Loaded From File.";
 }
 
 void exitMovie()
@@ -328,7 +330,7 @@ int main(){
     initialize_genres();
     do
     {
-        cout << "========= MOVIE RECOMMENDATION APP =========" << endl;
+        cout << "\n========= MOVIE RECOMMENDATION APP =========" << endl;
         cout << "1. Add Movie" << endl;
         cout << "2. Delete Movie" << endl;
         cout << "3. Search Movie" << endl;
