@@ -118,7 +118,7 @@ void addMovie(){
 void delMovie()
 {
     string movieTitle;
-    cout << "Enter Movie Title: "; cin >> movieTitle;
+    cout << "Enter Movie Title: "; getline(cin,movieTitle);
 
     int movieIndex = -1;
     for (int i=0; i < movieCount; i++){
